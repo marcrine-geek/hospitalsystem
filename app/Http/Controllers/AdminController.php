@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Doctor;
 
+use App\Models\Appointment;
+
 class AdminController extends Controller
 {
     public function addview(){
@@ -28,7 +30,112 @@ class AdminController extends Controller
 
         return redirect()->back()->with('message','Doctor Added Successfully');
 
+    }
+
+    public function showappointments(){
+
+        $data=appointment::all();
+
+        return view('admin.showappointments', compact('data'));
+
+    }
+
+    public function approve($id){
+        $data=appointment::find($id);
+
+        $data->status='Approved';
+
+        $data->save();
+
+        return redirect()->back();
+    }
+
+    public function cancel($id){
+        $data=appointment::find($id);
+
+        $data->status='Cancelled';
+
+        $data->save();
+
+        return redirect()->back();
+    }
+
+    public function showdoctors(){
+
+        $data=doctor::all();
+
+        return view('admin.showdoctor', compact('data'));
+    }
+
+    public function deletedoctor($id){
+
+        $data=doctor::find($id);
+
+        $data->delete();
+
+        return redirect()->back();
+    }
+
+    public function updatedoctor($id){
+
+        $data=doctor::find($id);
+
+        return view('admin.update_doctor', compact('data'));
+    }
+
+    public function editdoctor(Request $request, $id){
+
+        $doctor=doctor::find($id);
+
+        $doctor->name=$request->name;
+        $doctor->phone=$request->phone;
+        $doctor->speciality=$request->speciality;
+        $doctor->room=$request->room;
+
+        $image=$request->file;
+
+        if ($image){
+
+            $imagename=time().'.'.$image->getClientOriginalextension();
+            $request->file->move('doctorimage', $imagename);
+            $doctor->image=$imagename;
+
+        }
+
+
+        $doctor->save();
+
+        return redirect()->back()->with('message', 'Details Updated Successfully');
 
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

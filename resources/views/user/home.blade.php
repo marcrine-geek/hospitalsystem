@@ -87,6 +87,10 @@
 
                         @auth
 
+                            <li class="nav-item">
+                                <a class="nav-link" style="background-color: gold; color: #0a0a0a" href="{{url('myappointment')}}">My Appointment</a>
+                            </li>
+
                             <x-app-layout>
 
                             </x-app-layout>
